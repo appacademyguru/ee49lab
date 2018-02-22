@@ -6,8 +6,9 @@ from machine import RTC
 wlan = WLAN(STA_IF)
 wlan.active(True)
 
+wlan.connect('megan52472', 'jydy2847', 5000)
 # wlan.connect('EECS-PSK', 'Thequickbrown', 5000)
-wlan.connect('NETGEAR84', 'pr@ba6u2hka~', 5000)
+# wlan.connect('NETGEAR84', 'pr@ba6u2hka~', 5000)
 while not wlan.isconnected():
     print("Waiting for wlan connection")
     time.sleep(1)
@@ -18,7 +19,7 @@ try:
     hostname = 'wigglesby'
     mdns = mDNS(wlan)
     mdns.start(hostname, "MicroPython REPL")
-    mdns.addSErvice('_repl', '_tcp', 23, hostname)
+    mdns.addService('_repl', '_tcp', 23, hostname)
     print("Advertised locally as {}.local".format(hostname))
 except OSError:
     print("Failed starting mDNS server - already started?")

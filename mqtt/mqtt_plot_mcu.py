@@ -3,7 +3,7 @@ from math import sin
 import network
 import sys
 """
-Send measurement results from microphyton board to host computer.
+Send measurement results from micropython board to host computer.
 Use in combination with mqtt_plot_host.py.
 ' print ' statements throughout the code are for testing and can be removed once
 verification is complete.
@@ -17,10 +17,10 @@ wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 ip = wlan.ifconfig ()[0]
 if ip == ' 0.0.0.0 ' :
-print("no wifi connection")
-sys.exit ()
+    print("no wifi connection")
+    sys.exit ()
 else:
-print("connected to WiFi at IP", ip)
+    print("connected to WiFi at IP", ip)
 # connect to MQTT broker
 print("Connecting to MQTT broker", BROKER , "...", end="")
 mqtt = MQTTClient (BROKER)
@@ -29,14 +29,15 @@ print("Connected!")
 # In this sample , we send "fake" data. Replace this code to send useful data ,
 # e.g. measurement results.
 for t in range(100):
-s = sin(t/10)
-# add additional values as required by application
-topic = "{}/data".format(session)
-data = "{} ,{}".format(t, s)
-print("send topic = '{} ' data = '{} ' ".format(topic , data ))
-mqtt.publish(topic , data)
-# do the plotting (on host)
-print("tell host to do the plotting ...")
-mqtt.publish("{}/plot".format(session), "create the plot")
+    s = sin(t/10)
+    # add additional values as required by application
+    topic = "{}/data".format(session)
+    data = "{} ,{}".format(t, s)
+    print("send topic = '{} ' data = '{} ' ".format(topic , data ))
+    mqtt.publish(topic , data)
+    # do the plotting (on host)
+    print("tell host to do the plotting ...")
+    mqtt.publish("{}/plot".format(session), "create the plot")
 # free up resources
-# alternatively rese
+# alternatively reset the micropython board before executing this program again 
+mqtt.disconnect()

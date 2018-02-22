@@ -24,8 +24,14 @@ mqtt.connect(BROKER , 1883)
 print("Connected!")
 # initialize data vectors
 # in this example we plot only 1 value , add more as needed
-t = []
-s = []
+v = []
+i = []
+p = []
+r = []
+
+def appenb(d, f):  # append consecutive members of f to each member of d
+    for a, i in zip(d,f):
+        a.append(f[i])
 # mqtt callbacks
 def data(c, u, message ):
     # extract data from MQTT message
@@ -34,25 +40,28 @@ def data(c, u, message ):
     f = [ float(x) for x in msg.split( ' , ' ) ]
     print("received", f)
     # append to data vectors , add more as needed
-    t.append(f[0])
-    s.append(f[1])
+    appenb([v,i,p,r], f)
+    # v.append(f[0])
+    # i.append(f[1])
+    # p.append(f[2])
+    # r.append(f[3])
 def plot(client , userdata , message ):
     # customize this to match your data
     print("plotting ...")
-    plt.plot(t, s, ' rs ' )
+    plt.plot(v, i, p, r)
     plt.xlabel( ' Time ' )
-    plt.ylabel( ' Sinusoid ' )
+    plt.ylabel( ' Plot ' )
     print("show plot ...")
     # show plot on screen
-    3
-    plt.show ()
+    # 3
+    plt.show()
 # subscribe to topics
 data_topic = "{}/data".format(session , qos)
 plot_topic = "{}/plot".format(session , qos)
-mqtt. subscribe ( data_topic )
-mqtt. subscribe ( plot_topic )
-mqtt. message_callback_add (data_topic , data)
-mqtt. message_callback_add (plot_topic , plot)
+mqtt.subscribe(data_topic)
+mqtt.subscribe(plot_topic)
+mqtt.message_callback_add(data_topic , data)
+mqtt.message_callback_add(plot_topic , plot)
 # wait for MQTT messages
 # this function never returns
 print("waiting for data ...")
