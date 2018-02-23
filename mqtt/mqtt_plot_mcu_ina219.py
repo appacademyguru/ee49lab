@@ -28,7 +28,7 @@ print("Connecting to MQTT broker", BROKER , "...", end="")
 mqtt = MQTTClient("iot.eclipse.org")
 print("Connected!")
 ############################# Plot Client#######################################################
-mqtt = MQTTClient("iot.eclipse.org")
+
 mp = PlotClient(mqtt, session)
 
 SERIES = "data"
