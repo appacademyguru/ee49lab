@@ -15,14 +15,14 @@ session = "wigglesc"
 BROKER = "iot.eclipse.org"
 
 # check wifi connection
-wlan = network.WLAN(network.STA_IF)
-wlan.active(True)
-ip = wlan.ifconfig()[0]
-if ip == '0.0.0.0':
-    print("no wifi connection")
-    sys.exit()
-else:
-    print("connected to WiFi at IP", ip)
+# wlan = network.WLAN(network.STA_IF)
+# wlan.active(True)
+# ip = wlan.ifconfig()[0]
+# if ip == '0.0.0.0':
+#     print("no wifi connection")
+#     sys.exit()
+# else:
+#     print("connected to WiFi at IP", ip)
 # connect to MQTT broker
 print("Connecting to MQTT broker", BROKER , "...", end="")
 mqtt = MQTTClient("iot.eclipse.org")
@@ -64,7 +64,7 @@ ina.configure()
 # print("Power: %.3f mW" % ina.power())
 #measure, subscribe, publish plot_load_pkl
 mp.new_series(SERIES, 'v', 'i', 'p', 'r')
-while i is not false:
+while n is not false:
     v = ina.voltage()
     i = ina.current()
     p = ina.power()
@@ -72,7 +72,7 @@ while i is not false:
         r = v/i
     r = 0
     if r > 8:
-        i = flase
+        n = false
     print("V = {:6.2f}, I = {:6.2f}, R = {:6.2f}, P={:6.2f}".format(v, i, r, p))
     mp.data(SERIES, v, i, p, r)
     time.sleep(0.5)
