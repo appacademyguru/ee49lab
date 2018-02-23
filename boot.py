@@ -6,7 +6,7 @@ from machine import RTC
 wlan = WLAN(STA_IF)
 wlan.active(True)
 
-wlan.connect('megan52472', 'jydy2847', 5000)
+wlan.connect('DESKTOP-F42IOJR 8967', '285F>6e3', 5000)
 # wlan.connect('EECS-PSK', 'Thequickbrown', 5000)
 # wlan.connect('NETGEAR84', 'pr@ba6u2hka~', 5000)
 while not wlan.isconnected():
