@@ -79,7 +79,6 @@ while n is not false:
 
 mp.save_series(SERIES)
 
-
 # free up resources
 # alternatively reset the micropython board before executing this program again
 mqtt.disconnect()
