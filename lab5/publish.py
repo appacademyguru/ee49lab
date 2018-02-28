@@ -17,17 +17,16 @@
 # - Thinkspeak MQTT API Key for the account
 #
 
-import network
-from umqtt.robust import MQTTClient
-import utime
-import uos
+from network import *
+import os
 import gc
 ############ina219########################
-from ina219 import INA219
 from machine import I2C, Pin
 from board import SDA, SCL
 import time
 import json
+from mqttclient import *
+from ina219 import INA219
 ############ina219########################
 #
 # WiFi connection information
@@ -55,13 +54,13 @@ maxAttempts = 20
 attemptCount = 0
 while not wifi.isconnected() and attemptCount < maxAttempts:
   attemptCount +=1
-  utime.sleep(1)
+  time.sleep(1)
   print('did not connect...trying again')
 
 #
 # create a random MQTT clientID
 #
-randomNum = int.from_bytes(uos.urandom(3), 'little')
+randomNum = int.from_bytes(os.urandom(3), 'little')
 myMqttClient = bytes("client_"+str(randomNum), 'utf-8')
 
 #
@@ -86,36 +85,27 @@ client = MQTTClient(client_id=myMqttClient,
 client.connect()
 
 # ############################################################################################################
-
+from lib.ina219_app import *
 def measure_vi():
-    i2c = I2C(id=0, scl=Pin(SCL), sda=Pin(SDA), freq=100000)
-
-    #optional: detetct all devices connecto to I2C bus
-    print("scanning I2C bus...")
-    print("I2C:", i2c.scan())
-
-    #initialize INA219
-    IRC_INTERFACE_NO = 2
-    SHUNT_RESISTOR_OHMS = 0.1
-    ina = INA219(SHUNT_RESISTOR_OHMS, i2c)
-    ina.configure()
+    # ina = INA()
 
     #read measurements
     # print("Bus Voltage: %.3f V" % ina.voltage())
     # print("Current: %.3f mA" % ina.current())
     # print("Power: %.3f mW" % ina.power())
     for _ in range(30):
-        v = ina.voltage()
-        i = ina.current()
-
+        # v = ina.voltage()
+        # i = ina.current()
+        v = 1
+        i = 2
         print("V = {:6.2f}, I = {:6.2f}, R = {:6.2f}, P={:6.2f}".format(v, i, r, p))
         credentials = bytes("channels/{:s}/publish/{:s}".format(thingspeakChannelId, thingspeakChannelWriteApiKey), 'utf-8')
         payload = bytes("field1={:.1f}&field2={:.1f}\n".format(v, i), 'utf-8')
         client.publish(credentials, payload)
-        utime.sleep(publishPeriodInSec)
+        time.sleep(publishPeriodInSec)
 ###############################################################################################################
 #
-# publish free heap to Thingspeak using MQTT
+# publish data to Thingspeak using MQTT
 #
 thingspeakChannelId = b"437688"             # EDIT - enter Thingspeak Channel ID
 thingspeakChannelWriteApiKey = b"UU8PB5LQU09GHLN2" # EDIT - enter Thingspeak Write API Key
