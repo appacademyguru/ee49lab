@@ -26,8 +26,6 @@ def string2data(string):
     data = json.loads(string) #convert back to dict
     return data
 
-
-
 #read measurements
 # print("Bus Voltage: %.3f V" % ina.voltage())
 # print("Current: %.3f mA" % ina.current())

@@ -15,14 +15,14 @@ session = "wigglesc"
 BROKER = "iot.eclipse.org"
 
 # check wifi connection
-# wlan = network.WLAN(network.STA_IF)
-# wlan.active(True)
-# ip = wlan.ifconfig()[0]
-# if ip == '0.0.0.0':
-#     print("no wifi connection")
-#     sys.exit()
-# else:
-#     print("connected to WiFi at IP", ip)
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+ip = wlan.ifconfig()[0]
+if ip == '0.0.0.0':
+    print("no wifi connection")
+    sys.exit()
+else:
+    print("connected to WiFi at IP", ip)
 # connect to MQTT broker
 print("Connecting to MQTT broker", BROKER , "...", end="")
 mqtt = MQTTClient("iot.eclipse.org")
@@ -49,19 +49,7 @@ IRC_INTERFACE_NO = 2
 SHUNT_RESISTOR_OHMS = 0.1
 ina = INA219(SHUNT_RESISTOR_OHMS, i2c)
 ina.configure()
-# # on esp32
-# def data2string(**args): # ** converts args to dict
-#     string = json.dumps(args) #json.dumps converts dict to string
-#     return string
-# #on host
-# def string2data(string):
-#     data = json.loads(string) #convert back to dict
-#     return data
 ############################# MEASUREMENTS #######################################################
-#read measurements
-# print("Bus Voltage: %.3f V" % ina.voltage())
-# print("Current: %.3f mA" % ina.current())
-# print("Power: %.3f mW" % ina.power())
 #measure, subscribe, publish plot_load_pkl
 mp.new_series(SERIES, 'v', 'i', 'p', 'r')
 while n is not false:
