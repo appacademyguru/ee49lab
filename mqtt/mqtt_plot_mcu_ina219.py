@@ -37,18 +37,11 @@ SERIES = "data"
 from ina219 import INA219
 from machine import I2C, Pin
 from board import SDA, SCL
+from ina219_app import INA
 import time
 import json
 
-i2c = I2C(id=0, scl=Pin(SCL), sda=Pin(SDA), freq=100000)
-#optional: detetct all devices connecto to I2C bus
-print("scanning I2C bus...")
-print("I2C:", i2c.scan())
-#initialize INA219
-IRC_INTERFACE_NO = 2
-SHUNT_RESISTOR_OHMS = 0.1
-ina = INA219(SHUNT_RESISTOR_OHMS, i2c)
-ina.configure()
+ina = INA()
 ############################# MEASUREMENTS #######################################################
 #measure, subscribe, publish plot_load_pkl
 mp.new_series(SERIES, 'v', 'i', 'p', 'r')
@@ -65,7 +58,7 @@ while n is not false:
     mp.data(SERIES, v, i, p, r)
     time.sleep(0.5)
 
-mp.save_series(SERIES)
+mp.save_series(SERIES, "wigglesc.pkl")
 
 # free up resources
 # alternatively reset the micropython board before executing this program again
