@@ -25,7 +25,7 @@ else:
     print("connected to WiFi at IP", ip)
 # connect to MQTT broker
 print("Connecting to MQTT broker", BROKER , "...", end="")
-mqtt = MQTTClient("iot.eclipse.org")
+mqtt = MQTTClient(BROKER) #system index out of range error
 print("Connected!")
 ############################# Plot Client#######################################################
 
