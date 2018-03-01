@@ -21,18 +21,21 @@ from network import *
 import os
 import gc
 ############ina219########################
+from mqttclient import *
 from machine import I2C, Pin
 from board import SDA, SCL
 import time
 import json
-from mqttclient import *
+import sys
 from ina219 import INA219
 ############ina219########################
 #
 # WiFi connection information
 #
-wifiSSID = "EECS-PSK"          # EDIT - enter name of WiFi connection point
-wifiPassword = "Thequickbrown"  # EDIT - enter WiFi password
+wifiSSID = "megan's laptop"          # EDIT - enter name of WiFi connection point
+wifiPassword = "285F>6e3"
+# wifiSSID = "EECS-PSK"          # EDIT - enter name of WiFi connection point
+# wifiPassword = "Thequickbrown"  # EDIT - enter WiFi password
 
 #
 # turn off the WiFi Access Point
