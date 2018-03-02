@@ -1,15 +1,4 @@
-# The MIT License (MIT)
-# Copyright (c) 2017 Mike Teachman
-# https://opensource.org/licenses/MIT
-#
-# Publish data to a Thingspeak channel using the MQTT protocol
-#
-# Micropython implementation using the ESP8266 platform
-# Tested using Micropython v1.9.3 (Nov 1, 2017)
-#
-# Tested using Hardware:
-# - Adafruit Feather HUZZAH ESP8266
-#
+
 # prerequisites:
 # - Thingspeak account
 # - Thingspeak channel to publish data
@@ -17,11 +6,11 @@
 # - Thinkspeak MQTT API Key for the account
 #
 
-from network import *
+import network
 import os
 import gc
 ############ina219########################
-from mqttclient import *
+from mqttclient import MQTTClient
 from machine import I2C, Pin
 from board import SDA, SCL
 import time
