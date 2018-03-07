@@ -4,12 +4,8 @@ import network
 import sys
 
 session = "wigglesc"
-BROKER = "mqtt.thingspeak.com"
+BROKER = "iot.eclipse.org"
 
-TS_CHANNEL_ID = '437688'
-TS_WRITE_KEY = 'UU8PB5LQU09GHLN2'
-topic = "channels/" + TS_CHANNEL_ID + "/publish/" + TS_WRITE_KEY
-############################# WIFI #######################################################
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 ip = wlan.ifconfig()[0]
@@ -20,10 +16,10 @@ else:
     print("connected to WiFi at IP", ip)
 
 print("Connecting to MQTT broker", BROKER, "...", end="")
-mqtt = MQTTClient(BROKER, user="", password="", ssl=True)
+mqtt = MQTTClient(BROKER)
 print("connected!")
 
-############################# INA219 #######################################################
+
 # initialize ina219
 from ina219 import INA219
 from machine import I2C, Pin
@@ -45,16 +41,25 @@ ina = INA219(SHUNT_RESISTOR_OHMS, i2c)
 ina.configure()
 # ina = INA()
 ############################# MEASUREMENTS #######################################################
-
+v=[]
+i=[]
+p=[]
+r=[]
 for _ in range(100):
-    v=ina.voltage()
-    i=ina.current()
-    message = "field1={}&field2={}".format(v, i)
-    print("PUBLISH topic = {}, msg = {}".format(topic, message))
-    mqtt.publish(topic, message)
-    print("published")
-    time.sleep(15)
+    v.append(ina.voltage())
+    i.append(ina.current())
+    p.append(ina.power())
+    if ina.current() != 0:
+        r.append(ina.voltage()/ina.current())
+    else:
+        r.append(0)
     # add additional values as required by application
-
+topic = "{}/data".format(session)
+data = "{} , {}".format(r, p)
+print("send topic = '{} ' data = '{} ' ".format(topic, data))
+mqtt.publish(topic, data)
+# do the plotting (on host)
+print("tell host to do the plotting ...")
+mqtt.publish("{}/plot".format(session), "create the plot")
 
 mqtt.disconnect()

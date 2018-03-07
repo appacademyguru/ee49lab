@@ -6,8 +6,8 @@ import sys
 session = "wigglesc"
 BROKER = "mqtt.thingspeak.com"
 
-TS_CHANNEL_ID = '437688'
-TS_WRITE_KEY = 'UU8PB5LQU09GHLN2'
+TS_CHANNEL_ID = '440884'
+TS_WRITE_KEY = '7839Z0UZ5F1YQ5TB'
 topic = "channels/" + TS_CHANNEL_ID + "/publish/" + TS_WRITE_KEY
 ############################# WIFI #######################################################
 wlan = network.WLAN(network.STA_IF)
@@ -22,6 +22,10 @@ else:
 print("Connecting to MQTT broker", BROKER, "...", end="")
 mqtt = MQTTClient(BROKER, user="", password="", ssl=True)
 print("connected!")
+
+# turn on LED
+led(1)
+print("awake")
 
 ############################# INA219 #######################################################
 # initialize ina219
@@ -44,9 +48,18 @@ SHUNT_RESISTOR_OHMS = 0.1
 ina = INA219(SHUNT_RESISTOR_OHMS, i2c)
 ina.configure()
 # ina = INA()
-############################# MEASUREMENTS #######################################################
 
-for _ in range(100):
+##################LED#############################
+from time import sleep
+from machine import deepsleep, Pin
+from board import LED
+#################################MAIN CODE############################################################
+
+
+############################# MEASUREMENTS #######################################################
+# measure solar cell voltage and current w ina219
+# send result to thingspeak
+for _ in range(20):
     v=ina.voltage()
     i=ina.current()
     message = "field1={}&field2={}".format(v, i)
@@ -55,6 +68,9 @@ for _ in range(100):
     print("published")
     time.sleep(15)
     # add additional values as required by application
-
-
 mqtt.disconnect()
+########################################################################################################################
+# turn off LED and enter deep sleep for 10 seconds
+led(0)
+# put the device to sleep
+deepsleep(10000)

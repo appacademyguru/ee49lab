@@ -7,8 +7,8 @@ wlan = WLAN(STA_IF)
 wlan.active(True)
 
 # wlan.connect('megans laptop', '285F>6e3', 5000)
-wlan.connect('EECS-PSK', 'Thequickbrown', 5000)
-# wlan.connect('NETGEAR84', 'pr@ba6u2hka~', 5000)
+# wlan.connect('EECS-PSK', 'Thequickbrown', 5000)
+wlan.connect('NETGEAR84', 'pr@ba6u2hka~', 5000)
 while not wlan.isconnected():
     print("Waiting for wlan connection")
     time.sleep(1)
