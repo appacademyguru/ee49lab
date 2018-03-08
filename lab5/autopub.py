@@ -2,7 +2,8 @@ from mqttclient import MQTTClient
 from math import sin
 import network
 import sys
-
+from board import LED
+from machine import I2C, Pin
 session = "wigglesc"
 BROKER = "mqtt.thingspeak.com"
 
@@ -24,13 +25,13 @@ mqtt = MQTTClient(BROKER, user="", password="", ssl=True)
 print("connected!")
 
 # turn on LED
+led = Pin(LED, mode=Pin.OUT)
 led(1)
 print("awake")
 
 ############################# INA219 #######################################################
 # initialize ina219
 from ina219 import INA219
-from machine import I2C, Pin
 from board import SDA, SCL
 # from ina219_app import INA
 import time
