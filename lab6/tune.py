@@ -1,6 +1,6 @@
 import time, math
 import machine
-from board import LED, A12
+from board import LED, A5
 
 
 dut = 0
@@ -8,9 +8,9 @@ led = machine.Pin(LED, mode=machine.Pin.OPEN_DRAIN)
 pwm = machine.PWM(led, freq=500)
 pwm.duty(dut)
 
-buzz = machine.Pin(A12, mode=machine.Pin.OPEN_DRAIN)
+buzz = machine.Pin(A5, mode=machine.Pin.OPEN_DRAIN)
 pwm1 = machine.PWM(buzz, freq=500)
-pwm1.duty(100)
+pwm1.duty(50)
 
 # define frequency for each tone
 C3 = 131
@@ -77,13 +77,7 @@ C8 = 4186
 CS8 = 4435
 D8 = 4699
 DS8 = 4978
-rest = 0
-q = 1000
-h = 2000
-e = 500
-w = 4000
-s = 250
-bach = [ C4, E4, G4, C5, E5, rest, G4, C5, E5, C4, E4,rest, G4, C5, E5, G4, C5, E5, C4, D4, G4, D5, F5, G4, D5, F5, C4, D4, G4, D5, F5, G4, D5, F5, B3, D4, G4, D5, F5, G4, D5, F5, B3, D4, G4, D5, F5, G4, D5, F5, C4, E4, G4, C5, E5, G4, C5, E5, C4, E4, G4, C5, E5, G4, C5, E5, C4, E4, A4, E5, A5_, A4, E5, A4, C4, E4, A4, E5, A5_, A4, E5, A4, C4, D4, FS4, A4, D5, FS4, A4, D5, C4, D4, FS4, A4, D5, FS4, A4, D5, B3, D4, G4, D5, G5, G4, D5, G5, B3, D4, G4, D5, G5, G4, D5, G5, B3, C4, E4, G4, C5, E4, G4, C5, B3, C4, E4, G4, C5, E4, G4, C5, B3, C4, E4, G4, C5, E4, G4, C5, B3, C4, E4, G4, C5, E4, G4, C5, A3, C4, E4, G4, C5, E4, G4, C5, A3, C4, E4, G4, C5, E4, G4, C5, D3, A3, D4, FS4, C5, D4, FS4, C5, D3, A3, D4, FS4, C5, D4, FS4, C5, G3, B3, D4, G4, B4, D4, G4, B4, G3, B3, D4, G4, B4, D4, G4, B4 ]
+bach = [ C4, E4, G4, C5, E5, G4, C5, E5, C4, E4, G4, C5, E5, G4, C5, E5, C4, D4, G4, D5, F5, G4, D5, F5, C4, D4, G4, D5, F5, G4, D5, F5, B3, D4, G4, D5, F5, G4, D5, F5, B3, D4, G4, D5, F5, G4, D5, F5, C4, E4, G4, C5, E5, G4, C5, E5, C4, E4, G4, C5, E5, G4, C5, E5, C4, E4, A4, E5, A5_, A4, E5, A4, C4, E4, A4, E5, A5_, A4, E5, A4, C4, D4, FS4, A4, D5, FS4, A4, D5, C4, D4, FS4, A4, D5, FS4, A4, D5, B3, D4, G4, D5, G5, G4, D5, G5, B3, D4, G4, D5, G5, G4, D5, G5, B3, C4, E4, G4, C5, E4, G4, C5, B3, C4, E4, G4, C5, E4, G4, C5, B3, C4, E4, G4, C5, E4, G4, C5, B3, C4, E4, G4, C5, E4, G4, C5, A3, C4, E4, G4, C5, E4, G4, C5, A3, C4, E4, G4, C5, E4, G4, C5, D3, A3, D4, FS4, C5, D4, FS4, C5, D3, A3, D4, FS4, C5, D4, FS4, C5, G3, B3, D4, G4, B4, D4, G4, B4, G3, B3, D4, G4, B4, D4, G4, B4 ]
 def lcb(timer):
     global dut
     global pwm
@@ -92,12 +86,16 @@ def lcb(timer):
     else:
         dut = 0
     pwm.duty(dut)
+i = 0
 def bcb(timer):
     global bach
-    for note in bach:
-        p.freq(note)
-        time.sleep_ms(500)
+    global i
+    if i >= len(bach):
+        i = 0
+    note = bach[i]
+    pwm1.freq(note)
+    i += 1
 t0 = machine.Timer(2)
 t0.init(period=50, mode=t0.PERIODIC, callback=lcb)
 t1 = machine.Timer(3)
-t1.init(period=100, mode=t1.PERIODIC, callback=bcb)
+t1.init(period=1000, mode=t1.PERIODIC, callback=bcb)
