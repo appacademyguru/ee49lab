@@ -1,13 +1,15 @@
 import time, math
-from machine import deepsleep, Pin, PWM
+import machine
 from board import LED
 
 
 count = 0
 dut = 50
-p = Pin(A2, mode=Pin.OUT, pull=Pin.PULL_UP)
+p = machine.Pin(13, mode=machine.Pin.OUT, pull=machine.Pin.PULL_UP)
 p.init(p.OUT)
-pwm = machine.PWM(pin=p, freq=500, duty=50)
+pwm = machine.PWM(p)
+pwm.freq(500)
+pwm.duty(50)
 def led_cb():
     global dut
     if dut < 100:

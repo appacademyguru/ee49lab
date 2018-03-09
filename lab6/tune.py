@@ -1,6 +1,6 @@
 import time, machine, board
 
-led = machine.Pin(2, mode=Pin.OUT, pull=Pin.PULL_UP)
+led = machine.Pin(13, mode=Pin.OUT, pull=Pin.PULL_UP)#13
 p = machine.Pin(27, mode=Pin.OUT, pull=Pin.PULL_UP)
 pwm = machine.PWM(pin=led, freq=500, duty=50)
 pwm1 = machine.PWM(pin=p, freq=500, duty=50)
