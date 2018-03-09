@@ -8,7 +8,7 @@ led = machine.Pin(LED, mode=machine.Pin.OPEN_DRAIN)
 pwm = machine.PWM(led, freq=500)
 pwm.duty(dut)
 
-buzz = machin.Pin(A12, mode=machine.Pin.OPEN_DRAIN)
+buzz = machine.Pin(A12, mode=machine.Pin.OPEN_DRAIN)
 pwm1 = machine.PWM(buzz, freq=500)
 pwm1.duty(100)
 
@@ -93,11 +93,11 @@ def lcb(timer):
         dut = 0
     pwm.duty(dut)
 def bcb(timer):
-    nonlocal bach
+    global bach
     for note in bach:
         p.freq(note)
         time.sleep_ms(500)
 t0 = machine.Timer(2)
 t0.init(period=50, mode=t0.PERIODIC, callback=lcb)
-t1 = machine.Timer(2)
-t1.init(period=50, mode=t1.PERIODIC, callback=bcb)
+t1 = machine.Timer(3)
+t1.init(period=100, mode=t1.PERIODIC, callback=bcb)
