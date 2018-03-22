@@ -1,10 +1,33 @@
 import machine as m
-from board import ADC4, ADC5
+from board import ADC4, ADC5, SCL, SDA, A5
+import mpu9250
+#pins - need 4 for drv, 2 for encoders
+A6 = 19#14
+A10 = 23#27
+A8 = 21#15
+A5 = 10#A5
+A15 = 18#scl
+A14 = 17#SDA
+A18 = 13#MI
+A19 = 14#RX
+A20 = 15#TX
+A21 = 16#21
+
+
 #define pins
-xin1 = m.Pin(id, Pin.OUT)
-xin2 = m.Pin(id, Pin.OUT)
-pwm1 = m.PWM(xin1, freq=9000)
-pwm2 = m.PWM(xin2, freq=9000)
+#motor A
+Ain1 = m.Pin(, Pin.OUT)
+Ain2 = m.Pin(id, Pin.OUT)
+#motor B
+Bin1 = m.Pin(id, Pin.OUT)
+Bin2 = m.Pin(id, Pin.OUT)
+#define pwm
+fwdA = m.PWM(Ain1, freq=9000)
+fwdB = m.PWM(Bin1, freq=9000)
+rvsA = m.PWM(Ain2, freq=9000)
+rvsB = m.PWM(Bin2, freq=9000)
+#define encoders
+encA = m.ENC()
 #joystick
 adcx = machine.ADC(machine.Pin(ADC5))
 adcy = machine.ADC(machine.Pin(ADC4))
@@ -24,11 +47,25 @@ def reverse(speed):
     xin2.init()
     pwm2.duty(speed)
 def drive():
-    global adcx, adcy, xin1, xin2, pwm1, pwm2
+    global adcx, adcy
     x = adcx.read()/40.95
     y = adcy.read()/40.95
+    if
     pwm1.duty(x)
-    pwm.duty(y)
+    pwm2.duty(y)
 
 t0 = machine.Timer(2)
 t0.init(period=50, mode=t0.PERIODIC, callback=drive)
+
+#MPU9250
+i2c = m.I2C(scl=m.Pin(A15), sda=m.Pin(A14))
+mpu = MPU9250(i2c)
+def measure():
+    #acceleration, rate, magnetic field
+    accel, gyro, mag = mpu.sensors()
+    print("Acceleration: {}, Rate: {}, Mag-Field: {}".format(accel,gyro,mag))
+    #temp
+    print(mpu.temperature())
+
+t1 = machine.Timer(3)
+t1.init(period=200, mode=t1.PERIODIC, callback=measure)
