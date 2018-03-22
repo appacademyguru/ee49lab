@@ -84,8 +84,8 @@ pwm1 = machine.PWM(buzz, freq=500, duty=50)
 
 def lcb(timer):
     global adcx, adcy
-    x = (/255)*3.3
-    y = (codey/255)*3.3
+    x = adcx.read()/40.95
+    y = adcy.read()/.4095
     pwm1.duty(int(x))
     pwm1.freq(int(y))
 i = 0
